@@ -1,7 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
@@ -49,7 +49,7 @@ app.get("/info", (req, res) => {
 app.get("/api/persons/:id", (req, res) => {
     const id = Number(req.params.id);
     const person = persons.find((person) => person.id === id);
-    
+
     if (!person) {
         res.status(404).end();
         return;
@@ -80,7 +80,7 @@ app.post("/api/persons/", (req, res) => {
         });
     }
     const personExists = persons.find((person) => person.name === body.name);
-    
+
     if (personExists) {
         return res.status(400).json({
             error: "Person's name must be unique",
@@ -96,4 +96,5 @@ app.post("/api/persons/", (req, res) => {
 });
 
 app.listen(PORT);
-console.log(`The server is running on http://localhost:${PORT}`);
+
+console.log(`The server is running on port ${PORT}`);
