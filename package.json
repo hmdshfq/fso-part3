@@ -1,0 +1,16 @@
+{
+  "name": "fso-part3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "cd backend && pnpm install && cd ../frontend && pnpm install",
+    "start": "cd backend && pnpm run start",
+    "build": "cd backend && pnpm run build:ui"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.12.1"
+}
