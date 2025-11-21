@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "install": "cd backend && pnpm install && cd ../frontend && pnpm install",
+    "postinstall": "cd backend && pnpm install && cd ../frontend && pnpm install",
     "start": "cd backend && pnpm run start",
-    "build": "cd backend && pnpm install && pnpm run build:ui"
+    "build": "cd backend && pnpm run build:ui"
   },
   "keywords": [],
   "author": "",
