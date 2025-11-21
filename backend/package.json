@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "build:ui": "rm -rf dist && cd .. && cd frontend && rm -rf dist && pnpm install && pnpm run build && cp -r dist ../backend"
+    "build:ui": "rm -rf dist && cd ../frontend && pnpm run build && cp -r dist ../backend"
   },
   "keywords": [],
   "author": "",
@@ -18,5 +18,6 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.7"
-  }
+  },
+  "packageManager": "pnpm@10.12.1"
 }
