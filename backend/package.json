@@ -8,7 +8,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "build": "pnpm install && pnpm run build:ui",
-    "build:ui": "rm -rf dist && cd ../frontend && rm -rf dist && pnpm install && pnpm run build && cp -r dist ../backend",
+    "build:ui": "rm -rf dist && cd .. && cd frontend && rm -rf dist && pnpm install && pnpm run build && cp -r dist ../backend",
     "deploy:full": "npm run build:ui && git add . && git commit -m 'Build UI' && git push"
   },
   "keywords": [],
