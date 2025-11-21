@@ -1,5 +1,7 @@
+require('dotenv').config();
 const express = require("express");
 const morgan = require("morgan");
+const { Person, connectDB } = require('./models/person.js');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -7,91 +9,75 @@ app.use(express.json());
 app.use(express.static("dist"));
 
 morgan.token("post", (request, response) => {
-    return request.method === "POST" && JSON.stringify(request.body);
+  return request.method === "POST" && JSON.stringify(request.body);
 });
 
-app.use(morgan(":method :url :status :res[content-length] - :response-time ms :post"));
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms :post")
+);
 
-let persons = [
-    {
-        id: 1,
-        name: "Arto Hellas",
-        number: "040-123456",
-    },
-    {
-        id: 2,
-        name: "Ada Lovelace",
-        number: "39-44-5323523",
-    },
-    {
-        id: 3,
-        name: "Dan Abramov",
-        number: "12-43-234345",
-    },
-    {
-        id: 4,
-        name: "Mary Poppendieck",
-        number: "39-23-6423122",
-    },
-];
-
-app.get("/api/persons", (req, res) => {
-    res.json(persons);
+app.get("/api/people", async (req, res) => {
+  const people = await Person.find({});
+  res.json(people);
 });
 
-app.get("/info", (req, res) => {
-    res.send(`<p>Phonebook has info for ${persons.length} people</p><p>${new Date()}</p>`);
+app.get("/info", async (req, res) => {
+  const people = await Person.find({});
+  res.send(`<h1>There are ${people.length} people in the phonebook.</h1>`);
 });
 
-app.get("/api/persons/:id", (req, res) => {
-    const id = Number(req.params.id);
-    const person = persons.find((person) => person.id === id);
-
-    if (!person) {
-        res.status(404).end();
-        return;
-    }
-    res.json(person);
+app.get("/api/people/:id", async (req, res) => {
+  const id = Number(req.params.id);
+  const people = await Person.find({});
+  const person = people.find( person => person.id === id);
+  if (!person) {
+    res.status(404).end();
+    return;
+  }
+  res.json(person);
 });
 
-app.delete("/api/persons/:id", (req, res) => {
-    const id = req.params.id;
-    persons = persons.filter((person) => person.id !== id);
+app.delete("/api/people/:id", (req, res) => {
+  const id = req.params.id;
+  people = people.filter((person) => person.id !== id);
 
-    res.status(204).end();
+  res.status(204).end();
 });
 
-app.post("/api/persons/", (req, res) => {
-    const body = req.body;
-    if (!body.name && !body.number) {
-        return res.status(400).json({
-            error: "Name and number are missing",
-        });
-    } else if (!body.name) {
-        return res.status(400).json({
-            error: "Name is missing",
-        });
-    } else if (!body.number) {
-        return res.status(400).json({
-            error: "Number is missing",
-        });
-    }
-    const personExists = persons.find((person) => person.name === body.name);
+app.post("/api/people/", (req, res) => {
+  const body = req.body;
+  if (!body.name && !body.number) {
+    return res.status(400).json({
+      error: "Name and number are missing",
+    });
+  } else if (!body.name) {
+    return res.status(400).json({
+      error: "Name is missing",
+    });
+  } else if (!body.number) {
+    return res.status(400).json({
+      error: "Number is missing",
+    });
+  }
+  const personExists = people.find((person) => person.name === body.name);
 
-    if (personExists) {
-        return res.status(400).json({
-            error: "Person's name must be unique",
-        });
-    }
-    const person = {
-        id: Math.floor(Math.random() * 100000000),
-        name: body.name,
-        number: body.number,
-    };
-    persons = [...persons, person];
-    res.json(person);
+  if (personExists) {
+    return res.status(400).json({
+      error: "Person's name must be unique",
+    });
+  }
+  const person = {
+    id: Math.floor(Math.random() * 100000000),
+    name: body.name,
+    number: body.number,
+  };
+  people = [...people, person];
+  res.json(person);
 });
 
-app.listen(port, "::", () => {
+(async () => {
+  await connectDB;
+  app.listen(port, "::", () => {
     console.log(`Server listening on [::]${port}`);
-});
+  });
+})()
